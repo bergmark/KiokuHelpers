@@ -13,6 +13,7 @@
     "lib": "lib"
   },
   "engines": {
-    "node": "0.4.2"
-  }
+    "node": ">=0.4.2"
+  },
+  "main": "KiokuHelpers.js"
 }
