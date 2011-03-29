@@ -1,0 +1,17 @@
+{
+  "name": "KiokuHelpers",
+  "description": "Helper classes for KiokuJS",
+  "version": "0.0.1",
+  "homepage": "https://github.com/Raevel/KiokuHelpers",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Raevel/KiokuHelpers.git"
+  },
+  "author": "Adam Bergmark <adam@edea.se> (http://www.edea.se)",
+  "directories": {
+    "lib": "lib"
+  },
+  "engines": {
+    "node": "0.4.2"
+  }
+}
