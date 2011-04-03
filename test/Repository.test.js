@@ -31,7 +31,7 @@ use(['KiokuJS.Backend.CouchDB', 'KiokuJS.Linker', 'KiokuHelpers.Model'], functio
     scope.backend.__createDB().now();
   }).then(function () {
     scope.backend.__createView("all", "User", function () {
-      if (doc.type === "User") {
+      if (doc.className === "User") {
         emit(null, doc);
       }
     }).now();
