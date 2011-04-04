@@ -80,7 +80,7 @@ use(['KiokuJS.Backend.CouchDB', 'KiokuJS.Linker', 'KiokuHelpers.Model'], functio
       var u4 = new User({ name : "u4" });
       var u5 = new User({ name : "u5" });
       repository.storeSeveral([u4, u5]).then(function () {
-        repository.lookUpSeveral(u4.acquireID(), u5.acquireID()).now();
+        repository.lookUpSeveral([u4.acquireID(), u5.acquireID()]).now();
       }).then(function (arr) {
         assert.strictEqual(arr[0], u4);
         assert.strictEqual(arr[1], u5);
