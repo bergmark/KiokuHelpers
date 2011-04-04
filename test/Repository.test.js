@@ -31,22 +31,33 @@ use(['KiokuJS.Backend.CouchDB', 'KiokuJS.Linker', 'KiokuHelpers.Model'], functio
     scope.backend.__createDB().now();
   }).then(function () {
     scope.backend.__createView("all", "User", function (doc) {
-      if (doc.className === 'User') {
+      if (doc.className == 'User') {
         emit(null, doc);
       }
     }).now();
   }).then(function () {
+    /*
+    exports["find"] = function () {
+      var u = new User({ name : "u" });
+      repository.save(u).then(function () {
+        repository.find("User").now();
+      }).then(function (users) {
+        console.log(users);
+      }).now();
+    };
+    */
     exports["single arg"] = function () {
       var u1 = new User({ name : "u1" });
       repository.save(u1).then(function () {
-        repository.findByUuid(u1.acquireID()).then(function (u) {
-          assert.strictEqual(u, u1);
-          repository.remove(u).then(function () {
-            repository.find("User").now();
-          }).then(function (users) {
-            assert.strictEqual(0, users.length);
-          }).now();
-        }).now();
+        repository.findByUuid(u1.acquireID()).now();
+      }).then(function (u) {
+        assert.strictEqual(u, u1);
+        repository.remove(u).now();
+      }).then(function () {
+        repository.find("User").now();
+      }).then(function (users) {
+        assert.strictEqual(0, users.length);
+        this.CONT.CONTINUE();
       }).now();
     };
     exports["multiple args"] = function () {
