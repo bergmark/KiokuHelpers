@@ -57,7 +57,7 @@ use(['KiokuJS.Backend.CouchDB', 'KiokuJS.Linker', 'KiokuHelpers.Model'], functio
         repository.find("User").now();
       }).then(function (users) {
         assert.strictEqual(0, users.length);
-        this.CONT.CONTINUE();
+        this.CONTINUE();
       }).now();
     };
     exports["multiple args"] = function () {
@@ -65,15 +65,15 @@ use(['KiokuJS.Backend.CouchDB', 'KiokuJS.Linker', 'KiokuHelpers.Model'], functio
       var u3 = new User({ name : "u3" });
 
       repository.save(u2, u3).then(function () {
-        repository.findByUuid(u2.acquireID(), u3.acquireID()).then(function (_u2, _u3) {
-          assert.strictEqual(_u2, u2);
-          assert.strictEqual(_u3, u3);
-          repository.remove(u2, u3).now();
-        }).then(function () {
-          repository.find("User").now();
-        }).then(function (users) {
-          assert.strictEqual(0, users.length);
-        }).now();
+        repository.findByUuid(u2.acquireID(), u3.acquireID()).now();
+      }).then(function (_u2, _u3) {
+        assert.strictEqual(_u2, u2);
+        assert.strictEqual(_u3, u3);
+        repository.remove(u2, u3).now();
+      }).then(function () {
+        repository.find("User").now();
+      }).then(function (users) {
+        assert.strictEqual(0, users.length);
       }).now();
     };
     exports["array args"] = function () {
@@ -89,6 +89,7 @@ use(['KiokuJS.Backend.CouchDB', 'KiokuJS.Linker', 'KiokuHelpers.Model'], functio
         repository.find("User").now();
       }).then(function (users) {
         assert.strictEqual(0, users.length);
+        this.CONTINUE();
       }).now();
     };
   }).now();
