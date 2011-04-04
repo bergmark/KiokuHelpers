@@ -37,10 +37,10 @@ use(['KiokuJS.Backend.CouchDB', 'KiokuJS.Linker', 'KiokuHelpers.Model'], functio
     }).now();
   }).then(function () {
     /*
-    exports["find"] = function () {
+    exports["search"] = function () {
       var u = new User({ name : "u" });
-      repository.save(u).then(function () {
-        repository.find("User").now();
+      repository.store(u).then(function () {
+        repository.search("User").now();
       }).then(function (users) {
         console.log(users);
       }).now();
@@ -48,13 +48,13 @@ use(['KiokuJS.Backend.CouchDB', 'KiokuJS.Linker', 'KiokuHelpers.Model'], functio
     */
     exports["single arg"] = function () {
       var u1 = new User({ name : "u1" });
-      repository.save(u1).then(function () {
-        repository.findByUuid(u1.acquireID()).now();
+      repository.store(u1).then(function () {
+        repository.lookUp(u1.acquireID()).now();
       }).then(function (u) {
         assert.strictEqual(u, u1);
         repository.remove(u).now();
       }).then(function () {
-        repository.find("User").now();
+        repository.search("User").now();
       }).then(function (users) {
         assert.strictEqual(0, users.length);
         this.CONTINUE();
@@ -64,14 +64,14 @@ use(['KiokuJS.Backend.CouchDB', 'KiokuJS.Linker', 'KiokuHelpers.Model'], functio
       var u2 = new User({ name : "u2" });
       var u3 = new User({ name : "u3" });
 
-      repository.save(u2, u3).then(function () {
-        repository.findByUuid(u2.acquireID(), u3.acquireID()).now();
+      repository.store(u2, u3).then(function () {
+        repository.lookUp(u2.acquireID(), u3.acquireID()).now();
       }).then(function (_u2, _u3) {
         assert.strictEqual(_u2, u2);
         assert.strictEqual(_u3, u3);
         repository.remove(u2, u3).now();
       }).then(function () {
-        repository.find("User").now();
+        repository.search("User").now();
       }).then(function (users) {
         assert.strictEqual(0, users.length);
       }).now();
@@ -79,14 +79,14 @@ use(['KiokuJS.Backend.CouchDB', 'KiokuJS.Linker', 'KiokuHelpers.Model'], functio
     exports["array args"] = function () {
       var u4 = new User({ name : "u4" });
       var u5 = new User({ name : "u5" });
-      repository.saveSeveral([u4, u5]).then(function () {
-        repository.findByUuidSeveral(u4.acquireID(), u5.acquireID()).now();
+      repository.storeSeveral([u4, u5]).then(function () {
+        repository.lookUpSeveral(u4.acquireID(), u5.acquireID()).now();
       }).then(function (arr) {
         assert.strictEqual(arr[0], u4);
         assert.strictEqual(arr[1], u5);
         repository.removeSeveral([u4, u5]).now();
       }).then(function () {
-        repository.find("User").now();
+        repository.search("User").now();
       }).then(function (users) {
         assert.strictEqual(0, users.length);
         this.CONTINUE();
