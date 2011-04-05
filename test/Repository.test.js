@@ -1,9 +1,3 @@
-process.on('uncaughtException', function (err) {
-  console.log("uncaughtException");
-  console.log(require('sys').inspect(err));
-  throw err;
-});
-
 var assert = require("assert");
 require("../KiokuHelpers");
 var JSON = Cactus.Util.JSON;
@@ -36,31 +30,32 @@ use(['KiokuJS.Backend.CouchDB', 'KiokuJS.Linker', 'KiokuHelpers.Model'], functio
       }
     }).now();
   }).then(function () {
-    /*
-    exports["search"] = function () {
+    exports.teardown = function (done) {
+      repository.search("User").then(function (users) {
+        repository.removeSeveral(users).now();
+      }).then(function () {
+        done();
+      }).now();
+    };
+    exports["search"] = function (done) {
       var u = new User({ name : "u" });
       repository.store(u).then(function () {
         repository.search("User").now();
       }).then(function (users) {
-        console.log(users);
+        assert.strictEqual(1, users.length);
+        done();
       }).now();
     };
-    */
-    exports["single arg"] = function () {
+    exports["single arg"] = function (done) {
       var u1 = new User({ name : "u1" });
       repository.store(u1).then(function () {
         repository.lookUp(u1.acquireID()).now();
       }).then(function (u) {
         assert.strictEqual(u, u1);
-        repository.remove(u).now();
-      }).then(function () {
-        repository.search("User").now();
-      }).then(function (users) {
-        assert.strictEqual(0, users.length);
-        this.CONTINUE();
+        done();
       }).now();
     };
-    exports["multiple args"] = function () {
+    exports["multiple args"] = function (done) {
       var u2 = new User({ name : "u2" });
       var u3 = new User({ name : "u3" });
 
@@ -69,14 +64,10 @@ use(['KiokuJS.Backend.CouchDB', 'KiokuJS.Linker', 'KiokuHelpers.Model'], functio
       }).then(function (_u2, _u3) {
         assert.strictEqual(_u2, u2);
         assert.strictEqual(_u3, u3);
-        repository.remove(u2, u3).now();
-      }).then(function () {
-        repository.search("User").now();
-      }).then(function (users) {
-        assert.strictEqual(0, users.length);
+        done();
       }).now();
     };
-    exports["array args"] = function () {
+    exports["array args"] = function (done) {
       var u4 = new User({ name : "u4" });
       var u5 = new User({ name : "u5" });
       repository.storeSeveral([u4, u5]).then(function () {
@@ -84,12 +75,7 @@ use(['KiokuJS.Backend.CouchDB', 'KiokuJS.Linker', 'KiokuHelpers.Model'], functio
       }).then(function (arr) {
         assert.strictEqual(arr[0], u4);
         assert.strictEqual(arr[1], u5);
-        repository.removeSeveral([u4, u5]).now();
-      }).then(function () {
-        repository.search("User").now();
-      }).then(function (users) {
-        assert.strictEqual(0, users.length);
-        this.CONTINUE();
+        done();
       }).now();
     };
   }).now();
