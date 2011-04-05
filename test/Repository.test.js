@@ -79,5 +79,40 @@ use(['KiokuJS.Backend.CouchDB', 'KiokuJS.Linker', 'KiokuHelpers.Model'], functio
         done();
       }).now();
     };
+    exports.request = function (done) {
+      var u1 = new User({ name : "u1" });
+      var u2 = new User({ name : "u2" });
+      repository.request({
+        store : {
+          type : "store",
+          args : [u1, u2]
+        }
+      }).then(function () {
+        repository.request({
+          lookUpSeveral : {
+            type : "lookUpSeveral",
+            args : [u1.acquireID(), u2.acquireID()]
+          },
+          search : {
+            type : "search",
+            args : ["User"]
+          }
+        }).now();
+      }).then(function (h) {
+        assert.strictEqual(2, h.lookUpSeveral.length);
+        assert.strictEqual(2, h.search.length);
+        repository.request({
+          remove : {
+            type : "remove",
+            args : [u1, u2]
+          }
+        }).now();
+      }).then(function () {
+        repository.search("User").now();
+      }).then(function (users) {
+        assert.strictEqual(0, users.length);
+        done();
+      }).now();
+    };
   }).now();
 });
