@@ -38,11 +38,12 @@ use(['KiokuJS.Backend.CouchDB', 'KiokuJS.Linker', 'KiokuHelpers.Model'], functio
       }).now();
     };
     exports["search"] = function (done) {
-      var u = new User({ name : "u" });
-      repository.store(u).then(function () {
+      var u1 = new User({ name : "u1" });
+      var u2 = new User({ name : "u2" });
+      repository.store(u1, u2).then(function () {
         repository.search("User").now();
       }).then(function (users) {
-        assert.strictEqual(1, users.length);
+        assert.strictEqual(2, users.length);
         done();
       }).now();
     };
