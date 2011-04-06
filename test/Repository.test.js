@@ -44,6 +44,7 @@ use(['KiokuJS.Backend.CouchDB', 'KiokuJS.Linker', 'KiokuHelpers.Model'], functio
         repository.search("User").now();
       }).then(function (users) {
         assert.strictEqual(2, users.length);
+        assert.ok(users instanceof Array, "Should be array");
         done();
       }).now();
     };
