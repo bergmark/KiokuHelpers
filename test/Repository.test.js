@@ -75,6 +75,7 @@ use(['KiokuJS.Backend.CouchDB', 'KiokuJS.Linker', 'KiokuHelpers.Model'], functio
       repository.storeSeveral([u4, u5]).then(function () {
         repository.lookUpSeveral([u4.acquireID(), u5.acquireID()]).now();
       }).then(function (arr) {
+        assert.ok(arr instanceof Array);
         assert.strictEqual(arr[0], u4);
         assert.strictEqual(arr[1], u5);
         done();
