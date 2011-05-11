@@ -116,5 +116,11 @@ use(['KiokuJS.Backend.CouchDB', 'KiokuJS.Linker', 'KiokuHelpers.Model'], functio
         done();
       }).now();
     };
+    exports.lookUpError = function (done) {
+      repository.lookUp("").except(function (e) {
+        assert.ok(/Invalid UUID/i.test(e.message));
+        done();
+      }).now();
+    };
   }).now();
 });
