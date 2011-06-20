@@ -122,5 +122,19 @@ use(['KiokuJS.Backend.CouchDB', 'KiokuJS.Linker', 'KiokuHelpers.Model'], functio
         done();
       }).now();
     };
+    exports.searchFirst = function (done) {
+      var u1 = new User({ name : "u1" });
+      var u2 = new User({ name : "u2" });
+      repository.searchFirst("User").then(function (user) {
+        assert.strictEqual(null, user);
+
+        repository.store(u1, u2).now();
+      }).then(function () {
+        repository.searchFirst("User").now();
+      }).then(function (user) {
+        assert.ok(user instanceof User);
+        this.CONTINUE();
+      }).thenRun(done);
+    };
   }).now();
 });
