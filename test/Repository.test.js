@@ -178,6 +178,15 @@ use(['KiokuJS.Backend.CouchDB', 'KiokuJS.Linker', 'KiokuHelpers.Model'], functio
         }).now();
       }).then(function (users) {
         assert.eql([u5], users);
+
+        repository.searchPaged("User", {
+          page : 1,
+          itemsPerPage : 2,
+          descending : true
+        }).now();
+      }).then(function (users) {
+        assert.eql([u5, u4], users);
+
         done();
       }).now();
     };
