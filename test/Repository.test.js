@@ -10,7 +10,16 @@ use(['KiokuJS.Backend.CouchDB', 'KiokuJS.Linker', 'KiokuHelpers.Model'], functio
   Class("User", {
     does : KiokuJS.Feature.Class.OwnUUID,
     has : {
-      name : null
+      name : null,
+      createdAt : null
+    },
+    methods : {
+      initialize : function () {
+        this.createdAt = new Date();
+      },
+      toString : function () {
+        return "<" + this.name + ">";
+      }
     }
   });
   var handle = new KiokuJS.Backend.CouchDB({
@@ -26,7 +35,7 @@ use(['KiokuJS.Backend.CouchDB', 'KiokuJS.Linker', 'KiokuHelpers.Model'], functio
   }).then(function () {
     scope.backend.__createView("all", "User", function (doc) {
       if (doc.className == 'User') {
-        emit(null, doc);
+        emit(doc.data.createdAt.data, doc);
       }
     }).now();
   }).then(function () {
@@ -135,6 +144,42 @@ use(['KiokuJS.Backend.CouchDB', 'KiokuJS.Linker', 'KiokuHelpers.Model'], functio
         assert.ok(user instanceof User);
         this.CONTINUE();
       }).thenRun(done);
+    };
+    exports.searchPaged = function (done) {
+      var u1 = new User({ name : "u1" });
+      u1.createdAt = new Date(0);
+      var u2 = new User({ name : "u2" });
+      u2.createdAt = new Date(1000000);
+      var u3 = new User({ name : "u3" });
+      u3.createdAt = new Date(2000000);
+      var u4 = new User({ name : "u4" });
+      u4.createdAt = new Date(3000000);
+      var u5 = new User({ name : "u5" });
+      u5.createdAt = new Date(4000000);
+
+      repository.store(u1, u2, u3, u4, u5).then(function () {
+        repository.searchPaged("User", {
+          page : 1,
+          itemsPerPage : 2
+        }).now();
+      }).then(function (users) {
+        assert.eql([u1, u2], users);
+
+        repository.searchPaged("User", {
+          page : 2,
+          itemsPerPage : 2
+        }).now();
+      }).then(function (users) {
+        assert.eql([u3, u4], users);
+
+        repository.searchPaged("User", {
+          page : 3,
+          itemsPerPage : 2
+        }).now();
+      }).then(function (users) {
+        assert.eql([u5], users);
+        done();
+      }).now();
     };
   }).now();
 });
